@@ -17,11 +17,20 @@ class QuestionResponse(BaseModel):
 @app.get("/")
 async def root():
     return {
-        "message": "DeepSeek AI API is running!",
+        "message": "Gayathri Chilukala's AI Resume Assistant is running!",
+        "description": "Ask me anything about Gayathri's professional experience, skills, education, or projects",
         "endpoints": {
-            "POST /ask": "Ask a question to the AI",
-            "GET /": "This endpoint"
-        }
+            "POST /ask": "Ask questions about Gayathri's resume",
+            "GET /": "This endpoint",
+            "GET /health": "Health check"
+        },
+        "example_questions": [
+            "What is Gayathri's current job?",
+            "What programming languages does she know?",
+            "Tell me about her AI/ML experience",
+            "What projects has she worked on?",
+            "What is her educational background?"
+        ]
     }
 
 @app.post("/ask", response_model=QuestionResponse)
@@ -37,9 +46,56 @@ async def ask_question(request: QuestionRequest):
         endpoint = "https://models.github.ai/inference"
         model_name = "deepseek/DeepSeek-R1"
         
-        # Prepare the request payload
+        # Resume context for Gayathri Chilukala
+        resume_context = """
+        Gayathri Chilukala
+        Location: Bethesda, Maryland
+        Email: gchilukala2023@fau.edu
+        Phone: (561) 875-3556
+        
+        CURRENT ROLE:
+        Software Engineer, AI/ML at GEICO (January 2025 – Present) in Chevy Chase, Maryland
+        
+        KEY EXPERIENCE:
+        • LLM Backend Services & Infrastructure: Architected & deployed production-ready LLM backend services using Python and FastAPI, leveraging Azure managed compute and serverless infrastructure with vLLM for scalable AI application development.
+        • Model Optimization & Evaluation: Evaluated multiple LLMs for claims processing, achieving 2.5% accuracy improvement and 50% latency reduction using LLaMA model through systematic prompt fine-tuning while minimizing operational costs
+        • Generative AI Platform Engineering: Developed end-to-end Generative AI platform featuring intelligent document processing with multi-format support (PDF, CSV, DOCX, TXT) and OCR capabilities, implementing secure role-based access control with dynamic UI rendering based on user permission hierarchies to enhance developer productivity
+        • ML Pipeline & Analytics: Developed LLM evaluation pipeline with 30% processing time reduction through parallel executions, created Snowflake-powered dashboard for comparative model analysis and performance monitoring.
+        • Advanced Token Management: Implemented sophisticated token counting feature for images and documents across 8 different LLM models, developing model-specific calculation formulas and enforcing dynamic token limits with automated error handling
+        • Event-Driven Logging System: Built scalable logging service consuming encrypted and non-encrypted Kafka streams with PostgreSQL storage, providing comprehensive audit trails and real-time system monitoring.
+        • Developer Experience Platform: Built comprehensive MCP (Model Context Protocol) tools marketplace where users can register existing MCP tools (with links, configurations, and parameters) into a centralized library, enabling discovery and testing of tools for specific use case
+
+        PREVIOUS ROLE:
+        AI and C++ Graduate Teaching Assistant at Florida Atlantic University (January 2024 – December 2024)
+        • ML Algorithm Implementation & Education: Developed and taught advanced AI/ML algorithms including gradient descent, ridge regression, and coordinate descent, creating comprehensive hyperparameter tuning frameworks using cross-validation techniques (k-fold, LASSO, ridge regression)
+        • Developer Productivity Enhancement: Improved student learning outcomes by 40-50% through innovative ML performance visualization tools built with ggplot2, while instructing 300+ students in C++ object-oriented programming and algorithm optimization.
+
+        TECHNICAL PROJECTS:
+        1. SafetyMapper - Intelligent Community Safety Platform: Developed platform using Python Flask, Google Cloud Firestore, and Google Gemini AI for real-time incident reporting and AI-powered safety recommendations. Implemented route safety analysis system that evaluates transportation paths against incident data with multi-modal risk assessment and visual safety indicators.
+        
+        2. Pic2Plot - Multi-Agent AI System for Spatial Analysis: Engineered sophisticated multi-agent AI system with 4 specialized modules (image-to-floorplan generation, text-to-floorplan conversion, real estate automation, health recommendations) using GPT-4.1, LLaMA 3 Vision, Phi-3, and DALL-E 3, implementing adaptive cost optimization achieving 40% cost reduction and 3× performance improvement through FastMCP framework.
+
+        TECHNICAL SKILLS:
+        • Backend Development: Python, FastAPI, Django, Node.js, Java, JavaScript, C++, Go, C#, PHP, TypeScript
+        • Frontend & FullStack: React.js, Next.js, Express.js, React Native
+        • Cloud & DevOps: Azure, AWS (EC2, S3, Lambda), GCP, Docker, Kubernetes, Git, Kafka, Enterprise CI/CD Pipelines
+        • AI/ML Frameworks: TensorFlow, Keras, PyTorch, Hugging Face Transformers, LangChain, OpenAI API, scikit-learn, NLTK
+        • Databases & Analytics: PostgreSQL, MySQL, MongoDB, Firestore, Snowflake
+        • AI Specializations: Large Language Models (LLMs), Retrieval Augmented Generation (RAG), Generative AI, Natural Language Processing, Computer Vision, Agentic AI Systems
+
+        EDUCATION:
+        • Master of Science in Computer Science, Secondary Major in Artificial Intelligence - Florida Atlantic University, Boca Raton, FL | GPA: 3.96/4.0 | Aug 2023 - Dec 2024
+        • Bachelor of Technology with Honours in Computer Science - SASTRA Deemed University, Tamil Nadu | June 2019 - June 2023
+
+        ACHIEVEMENTS:
+        • Hugging Face Hackathon Winner (Caption Creator Pro): Architected high-performance multimodal AI platform integrating SambaNova Llama models with sophisticated multi-provider translation system, achieving sub-2.1s caption generation and 40% performance improvement over industry standards.
+        • Gangal Family Endowed Graduate Scholarship Award: Awarded to top 1% student in Computer Science department for academic excellence and TA contributions; only one recipient selected department wide.
+        """
+        
+        # Prepare the request payload with resume context
         payload = {
             "messages": [
+                {"role": "system", "content": f"You are an AI assistant helping answer questions about Gayathri Chilukala's resume and professional background. Here is her complete resume information:\n\n{resume_context}\n\nPlease answer questions based on this resume information. Be specific and accurate."},
                 {"role": "user", "content": request.question}
             ],
             "max_tokens": 1000,
