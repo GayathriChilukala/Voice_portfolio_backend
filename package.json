@@ -1,9 +1,8 @@
 {
   "name": "vercel-deepseek-api",
   "version": "1.0.0",
-  "type": "module",
   "dependencies": {
-    "@azure-rest/ai-inference": "^1.0.0",
-    "@azure/core-auth": "^1.5.0"
+    "@azure-rest/ai-inference": "*",
+    "@azure/core-auth": "*"
   }
 }
