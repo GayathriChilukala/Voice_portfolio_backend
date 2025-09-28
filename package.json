@@ -1,8 +1,0 @@
-{
-  "name": "vercel-deepseek-api",
-  "version": "1.0.0",
-  "dependencies": {
-    "@azure-rest/ai-inference": "*",
-    "@azure/core-auth": "*"
-  }
-}
