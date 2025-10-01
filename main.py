@@ -138,9 +138,7 @@ async def ask_question(request: QuestionRequest):
             answer = answer.strip()
             
             return QuestionResponse(
-                question=request.question,
-                answer=answer,
-                model=model_name
+                answer=answer
             )
             
     except httpx.TimeoutException:
