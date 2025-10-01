@@ -10,9 +10,7 @@ class QuestionRequest(BaseModel):
     question: str
 
 class QuestionResponse(BaseModel):
-    question: str
     answer: str
-    model: str
 
 @app.get("/")
 async def root():
@@ -137,12 +135,8 @@ async def ask_question(request: QuestionRequest):
             answer = re.sub(r'\*\*(.*?)\*\*', r'\1', answer)  # Remove bold formatting
             answer = answer.strip()
             
-            return QuestionResponse(
-                question=request.question,
-                answer=answer,
-                model=model_name
-                answer=answer
-            )
+            return QuestionResponse(answer=answer)
+            
     except httpx.TimeoutException:
         raise HTTPException(
             status_code=408,
