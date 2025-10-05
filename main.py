@@ -1,10 +1,20 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import httpx
 import os
 from typing import Optional
 
 app = FastAPI(title="Gayathri's Resume Assistant - GPT-4.1 Nano", description="Ask questions about Gayathri Chilukala's resume using GPT-4.1 Nano")
+
+# Add CORS middleware - THIS IS THE FIX!
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins - for production, specify your domain
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
 
 class QuestionRequest(BaseModel):
     question: str
@@ -150,7 +160,7 @@ async def ask_question(request: QuestionRequest):
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy"}
+    return {"status": "healthy", "cors": "enabled"}
 
 if __name__ == "__main__":
     import uvicorn
