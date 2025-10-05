@@ -5,7 +5,7 @@ import httpx
 import os
 from typing import Optional
 
-app = FastAPI(title="Gayathri's Resume Assistant - GPT-4.1 Nano", description="Ask questions about Gayathri Chilukala's resume using GPT-4.1 Nano")
+app = FastAPI(title="Gayathri's Resume Assistant - GPT-4.1", description="Ask questions about Gayathri Chilukala's resume using GPT-4.1")
 
 # Add CORS middleware - THIS IS THE FIX!
 app.add_middleware(
@@ -52,7 +52,7 @@ async def ask_question(request: QuestionRequest):
             )
         
         endpoint = "https://models.github.ai/inference"
-        model_name = "openai/gpt-4.1-nano"
+        model_name = "openai/gpt-4.1"
         
         # Resume context for Gayathri Chilukala - Exact copy from resume
         resume_context = """
